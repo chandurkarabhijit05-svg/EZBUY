@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import AddProductModel from "./AddProductModel";
 
 function Navbar() {
+  const [showModel, setShowModel] = useState(false);
+
   const styles = {
     nav: {
       display: "flex",
@@ -20,7 +24,7 @@ function Navbar() {
       fontSize: "26px",
       fontWeight: "bold",
       letterSpacing: "2px",
-      color: "#d4af37", // GOLD 💎
+      color: "#d4af37",
       cursor: "pointer",
     },
 
@@ -35,7 +39,6 @@ function Navbar() {
       textDecoration: "none",
       fontSize: "15px",
       letterSpacing: "1px",
-      position: "relative",
       transition: "0.3s",
     },
 
@@ -46,56 +49,68 @@ function Navbar() {
       color: "#d4af37",
       background: "transparent",
       cursor: "pointer",
-      transition: "0.3s",
       fontSize: "14px",
       fontWeight: "bold"
     }
   };
 
   return (
-    <div style={styles.nav}>
-      
-      {/* LOGO */}
-      <h2 style={styles.logo}>EZBUY</h2>
+    <>
+      <div style={styles.nav}>
+        <h2 style={styles.logo}>EZBUY</h2>
 
-      {/* LINKS */}
-      <div style={styles.navLinks}>
-        
-        {["Home", "Shop", "About", "Contact"].map((item) => (
-          <Link
-            key={item}
-            to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-            style={styles.link}
+        <div style={styles.navLinks}>
+          {["Home", "Shop", "About", "Contact"].map((item) => (
+            <Link
+              key={item}
+              to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+              style={styles.link}
+              onMouseOver={(e) => {
+                e.target.style.color = "#fff";
+                e.target.style.borderBottom = "2px solid #d4af37";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.color = "#ccc";
+                e.target.style.borderBottom = "none";
+              }}
+            >
+              {item.toUpperCase()}
+            </Link>
+          ))}
+
+          {/* ADD PRODUCT */}
+          <button
+            style={styles.button}
+            onClick={() => setShowModel(true)}
+          >
+            ADD PRODUCT
+          </button>
+
+          {/* LOGIN */}
+          <button
+            style={styles.button}
             onMouseOver={(e) => {
-              e.target.style.color = "#fff";
-              e.target.style.borderBottom = "2px solid #d4af37";
+              e.target.style.background = "#d4af37";
+              e.target.style.color = "#000";
             }}
             onMouseOut={(e) => {
-              e.target.style.color = "#ccc";
-              e.target.style.borderBottom = "none";
+              e.target.style.background = "transparent";
+              e.target.style.color = "#d4af37";
             }}
           >
-            {item.toUpperCase()}
-          </Link>
-        ))}
-
-        {/* CTA BUTTON */}
-        <button
-          style={styles.button}
-          onMouseOver={(e) => {
-            e.target.style.background = "#d4af37";
-            e.target.style.color = "#000";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = "transparent";
-            e.target.style.color = "#d4af37";
-          }}
-        >
-          LOGIN
-        </button>
-
+            LOGIN
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* MODEL POPUP */}
+      {showModel && (
+        <AddProductModel
+          close={() => setShowModel(false)}
+          refresh={() => console.log("refresh products")}
+        />
+      )}
+    </>
   );
 }
 
