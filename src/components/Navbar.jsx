@@ -1,101 +1,81 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { supabase } from "../supabase";
+import { useAuth } from "../context/AuthContext";
+import AddProductModel from "./AddProductModel";
+import "./Navbar.css";
 
 function Navbar() {
-  const styles = {
-    nav: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "15px 50px",
-      background: "rgba(0,0,0,0.85)",
-      backdropFilter: "blur(12px)",
-      color: "#fff",
-      position: "sticky",
-      top: 0,
-      zIndex: 1000,
-      borderBottom: "1px solid rgba(255,255,255,0.1)"
-    },
+  const { user } = useAuth();
+  const [showModal, setShowModal] = useState(false);
 
-    logo: {
-      fontSize: "26px",
-      fontWeight: "bold",
-      letterSpacing: "2px",
-      color: "#d4af37", // GOLD 💎
-      cursor: "pointer",
-    },
-
-    navLinks: {
-      display: "flex",
-      alignItems: "center",
-      gap: "25px",
-    },
-
-    link: {
-      color: "#ccc",
-      textDecoration: "none",
-      fontSize: "15px",
-      letterSpacing: "1px",
-      position: "relative",
-      transition: "0.3s",
-    },
-
-    button: {
-      padding: "8px 18px",
-      borderRadius: "20px",
-      border: "1px solid #d4af37",
-      color: "#d4af37",
-      background: "transparent",
-      cursor: "pointer",
-      transition: "0.3s",
-      fontSize: "14px",
-      fontWeight: "bold"
-    }
-  };
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    alert("Logged Out Successfully");
+  }
 
   return (
-    <div style={styles.nav}>
-      
-      {/* LOGO */}
-      <h2 style={styles.logo}>EZBUY</h2>
+    <>
+      <nav className="navbar">
+        {/* Logo */}
+        <Link to="/" className="logo">
+          EZBUY
+        </Link>
 
-      {/* LINKS */}
-      <div style={styles.navLinks}>
-        
-        {["Home", "Shop", "About", "Contact"].map((item) => (
-          <Link
-            key={item}
-            to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-            style={styles.link}
-            onMouseOver={(e) => {
-              e.target.style.color = "#fff";
-              e.target.style.borderBottom = "2px solid #d4af37";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.color = "#ccc";
-              e.target.style.borderBottom = "none";
-            }}
+        {/* Navigation Links */}
+        <div className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/shop">Shop</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+        </div>
+
+        {/* Right Side */}
+        <div className="auth-links">
+
+          {/* Always Visible */}
+          <button
+            className="login-btn"
+            onClick={() => setShowModal(true)}
           >
-            {item.toUpperCase()}
-          </Link>
-        ))}
+            Add Product
+          </button>
 
-        {/* CTA BUTTON */}
-        <button
-          style={styles.button}
-          onMouseOver={(e) => {
-            e.target.style.background = "#d4af37";
-            e.target.style.color = "#000";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = "transparent";
-            e.target.style.color = "#d4af37";
-          }}
-        >
-          LOGIN
-        </button>
+          {user ? (
+            <>
+              <span className="user-email">
+                {user.email}
+              </span>
 
-      </div>
-    </div>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/signin" className="login-btn">
+                Sign In
+              </Link>
+
+              <Link to="/signup" className="signup-btn">
+                Sign Up
+              </Link>
+            </>
+          )}
+        </div>
+      </nav>
+
+      {/* Popup */}
+      {showModal && (
+        <AddProductModel
+          close={() => setShowModal(false)}
+          refresh={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 }
 
