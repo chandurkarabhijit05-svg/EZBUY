@@ -1,0 +1,89 @@
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 50px;
+    background:#111;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    color:#E6B325;
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:2px;
+    text-decoration:none;
+}
+
+.nav-links,
+.auth-links{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.nav-links a,
+.auth-links a{
+    color:white;
+    text-decoration:none;
+    font-size:17px;
+    transition:.3s;
+}
+
+.nav-links a:hover,
+.auth-links a:hover{
+    color:#E6B325;
+}
+
+.login-btn,
+.signup-btn,
+.logout-btn{
+    padding:10px 18px;
+    border-radius:30px;
+    border:2px solid #E6B325;
+    background:transparent;
+    color:#E6B325;
+    cursor:pointer;
+    transition:.3s;
+    text-decoration:none;
+}
+
+.signup-btn{
+    background:#E6B325;
+    color:#111;
+}
+
+.login-btn:hover,
+.signup-btn:hover,
+.logout-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(230,179,37,.35);
+}
+
+.user-email{
+    color:#E6B325;
+    margin-right:15px;
+    font-size:15px;
+}
+
+@media(max-width:768px){
+
+.navbar{
+    flex-direction:column;
+    gap:15px;
+    padding:20px;
+}
+
+.nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.auth-links{
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+}
